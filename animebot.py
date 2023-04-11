@@ -22,8 +22,8 @@ bot = commands.Bot(command_prefix = "{", intents = discord.Intents.all())
 async def on_ready():
     print("hewwo :3")
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send("```info```")
-
+    await channel.send("``` i am a bot that uses https://myanimelist.net :3\n cuwwent commwands: \n anime_top (number)\n anime_popular```")
+    
 # Code by MaxJ02 #
 @bot.command()
 async def anime(ctx):
