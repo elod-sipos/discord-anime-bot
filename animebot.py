@@ -39,24 +39,39 @@ async def anime(ctx):
 # #
 
 @bot.command()
-async def anime(ctx, num: int):
+async def anime_top(ctx, num: int):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
     driver = webdriver.Chrome(options = options)
-    driver.get("https://myanimelist.net/topanime.php?type=bypopularity")
-    names = ""
+    driver.get("https://myanimelist.net/topanime.php")
+    top_names = ""
     count = 1
     num = int(num)
-    name_elements = driver.find_elements(By.CSS_SELECTOR, 'h3.hoverinfo_trigger a')
-    for name_element in name_elements:
+    top_name_elements = driver.find_elements(By.CSS_SELECTOR, "h3.hoverinfo_trigger a")
+    for top_name_element in top_name_elements:
         if count > num:
             break
         elif num > 50:
             await ctx.send("cannot go above 50 :3")
             break
-        names += str(count) + " " + name_element.text + "\n"
+        top_names += str(count) + " " + top_name_element.text + "\n"
         count += 1
-    await ctx.send("```" + names + "```")
- 
+    await ctx.send("```Here is the list of the highest rated anime\n```" + "```" + top_names + "```")
+
+@bot.command()
+async def anime_popular(ctx):
+    options = webdriver.ChromeOptions()
+    options.add_argument("headless")
+    driver = webdriver.Chrome(options = options)
+    driver.get("https://myanimelist.net/topanime.php?type=airing")
+    pop_names = ""
+    count = 0
+    pop_name_elements = driver.find_elements(By.CSS_SELECTOR, "h3.hoverinfo_trigger a")
+    for pop_name_element in pop_name_elements:
+        if count > 15:
+            break
+        pop_names += pop_name_element.text + "\n"
+        count += 1
+    await ctx.send("```Here is a list of what is currently most popular :3\n```" + "```" + pop_names + "```")
 
 bot.run(BOT_TOKEN)
