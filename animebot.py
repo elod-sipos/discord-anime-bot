@@ -64,14 +64,23 @@ async def anime_popular(ctx):
     options.add_argument("headless")
     driver = webdriver.Chrome(options = options)
     driver.get("https://myanimelist.net/topanime.php?type=airing")
-    pop_names = ""
+    pop_output = ""
+    pop_rank = ""
     count = 0
     pop_name_elements = driver.find_elements(By.CSS_SELECTOR, "h3.hoverinfo_trigger a")
-    for pop_name_element in pop_name_elements:
+    pop_rank_elements = driver.find_elements(By.CSS_SELECTOR, "td.score.ac.fs14 span.text.on.score-label")
+    for pop_rank_element in pop_rank_elements:
+        if count >15:
+            break
+        pop_rank += pop_rank_element.text + "\n"
+        count += 1
+
+    count = 0
+    for pop_name_element, pop_rank_element in zip(pop_name_elements, pop_rank_elements):
         if count > 15:
             break
-        pop_names += pop_name_element.text + "\n"
+        pop_output += f"{pop_rank_element.text} {pop_name_element.text}\n"
         count += 1
-    await ctx.send("```Here is a list of what is currently most popular :3\n```" + "```" + pop_names + "```")
+    await ctx.send("```Here is a list of what is currently most popular :3\n```" + "```" + pop_output + "```")
 
 bot.run(BOT_TOKEN)
