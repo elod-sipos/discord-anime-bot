@@ -39,17 +39,20 @@ async def anime(ctx):
 # #
 
 @bot.command()
-async def anime1(ctx):
+async def anime(ctx):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
     driver = webdriver.Chrome(options = options)
     driver.get("https://myanimelist.net/topanime.php?type=bypopularity")
     names = ""
+    count = 1
     name_elements = driver.find_elements(By.CSS_SELECTOR, 'h3.hoverinfo_trigger a')
     for name_element in name_elements:
-        names += name_element.text + "\n"
-    await ctx.send(names)
- 
+        if count > 10:
+            break
+        names += str(count) + " " + name_element.text + "\n"
+        count += 1
+    await ctx.send("```" + names + "```")
  
 
 bot.run(BOT_TOKEN)
